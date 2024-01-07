@@ -6,7 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "axios": "^1.4.0",
+    "axios": "^1.6.5",
     "dns": "^0.1.2",
     "dns-socket": "^4.2.2",
     "dotenv": "^16.3.1",

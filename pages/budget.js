@@ -107,6 +107,41 @@ const ExpenseForm = ({ onExpenseAdded }) => {
     });
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('api_key', 'TEST'); // Replace with your actual API key
+      formData.append('recognizer', 'auto');
+      formData.append('file', file);
+  
+      try {
+        const response = await axios.post('https://ocr2.asprise.com/api/v1/receipt', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        // Handle OCR results in the response.data object
+        console.log('OCR Results:', response.data);
+  
+        // Extract and update the expense state based on the OCR results
+        const extractedName = response.data?.receipts[0]?.merchant_name || 'Unknown';
+        const extractedAmount = response.data?.receipts[0]?.total || 0;
+        const extractedTag = response.data?.receipts[0]?.merchant || 'Other';
+  
+        setExpense({
+          ...expense,
+          name: extractedName,
+          amount: extractedAmount,
+          tag: extractedTag,
+        });
+      } catch (error) {
+        console.error('Error in OCR API request:', error);
+      }
+    }
+  };
+
    return (
     <div className="flex flex-col lg:flex-row gap-40 justify-between ">
       <div className="relative w-2/5  shadow-md bg-silver rounded-lg border border-gray-300 top-40 left-20 p-4 mx-6 flex justify-center items-center">
@@ -164,6 +199,32 @@ const ExpenseForm = ({ onExpenseAdded }) => {
             ))}
             </div>
           </div>
+          <div>
+            <label htmlFor="receipt-image" className="block font-medium">
+              Receipt Image
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              id="receipt-image"
+              name="receipt-image"
+              onChange={handleImageUpload}
+              className="form-input my-2"
+            />
+          </div>
+
+          {expense.amount !== undefined && (
+            <p>Extracted Amount: {expense.amount.toFixed(2)}</p>
+          )}
+
+          {expense.tag && (
+            <p>Identified Tag: {expense.tag}</p>
+          )}
+
+          {expense.name && (
+            <p>Extracted Name: {expense.name}</p>
+          )}
+          
           <div className="flex justify-center items-center gap-2">
             <button type="submit" className="btn btn-primary">
               Add Expense
