@@ -57,16 +57,19 @@ const ExpenseForm = ({ onExpenseAdded }) => {
       const tagTotals = {}; // Calculate tag totals
       
       expensesData.forEach((expense) => {
-        Object.keys(expense.wallet).forEach((tag) => {
-          const amount = expense.wallet[tag].total;
-
-          if (tagTotals[tag]) {
-            tagTotals[tag] += amount;
-          } else {
-            tagTotals[tag] = amount;
-          }
-        });
+        if (expense.wallet) {
+          Object.keys(expense.wallet).forEach((tag) => {
+            const amount = expense.wallet[tag].total;
+      
+            if (tagTotals[tag]) {
+              tagTotals[tag] += amount;
+            } else {
+              tagTotals[tag] = amount;
+            }
+          });
+        }
       });
+      
 
       console.log('Calculated wallet:', tagTotals);
 
@@ -229,7 +232,7 @@ const ExpenseForm = ({ onExpenseAdded }) => {
             <button type="submit" className="btn btn-primary">
               Add Expense
             </button>
-            <button type="button" className="btn btn-secondary" onClick={() => {  }}>
+            <button type="button" className="btn btn-secondary" onClick={() => {}}>
               Report
             </button>
           </div>
