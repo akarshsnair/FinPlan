@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 
 export default async function handler(req, res) {
-  const url = 'mongodb://localhost:27017';
+  const url = "mongodb://0.0.0.0:27017/";
   const dbName = 'dataDB';
 
   try {
