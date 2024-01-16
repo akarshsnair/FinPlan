@@ -55,16 +55,22 @@ const ExpenseForm = ({ onExpenseAdded }) => {
       console.log('Fetched data:', expensesData);
       
       const tagTotals = {}; // Calculate tag totals
+      let totalAllTags = 0; 
       
       expensesData.forEach((expense) => {
         if (expense.wallet) {
           Object.keys(expense.wallet).forEach((tag) => {
             const amount = expense.wallet[tag].total;
-      
-            if (tagTotals[tag]) {
-              tagTotals[tag] += amount;
-            } else {
-              tagTotals[tag] = amount;
+  
+            // Check if amount is a valid number
+            if (!isNaN(amount) && amount !== null) {
+              if (tagTotals[tag]) {
+                tagTotals[tag] += amount;
+              } else {
+                tagTotals[tag] = amount;
+              }
+
+              totalAllTags += amount;
             }
           });
         }
@@ -72,8 +78,13 @@ const ExpenseForm = ({ onExpenseAdded }) => {
       
 
       console.log('Calculated wallet:', tagTotals);
+      console.log('Total for all tags:', totalAllTags);
+      localStorage.setItem('totalAllTags', totalAllTags);
 
-      setWallet(tagTotals);
+      setWallet({
+        tagTotals,
+        totalAllTags,
+      });
     } catch (error) {
       console.error('Error occurred while retrieving data from MongoDB', error);
     }
@@ -145,8 +156,38 @@ const ExpenseForm = ({ onExpenseAdded }) => {
     }
   };
 
+  const renderPieChart = () => {
+    if (!wallet.tagTotals || Object.keys(wallet.tagTotals).length === 0) {
+      // Return some placeholder or loading state if data is not available
+      return <p>Loading...</p>;
+    }
+
+
+    return (
+      <Pie
+        data={{
+          datasets: [
+            {
+              data: [
+                wallet.tagTotals['SIPs'],
+                wallet.tagTotals['Travel'] || 0,
+                wallet.tagTotals['Shopping'] || 0,
+                wallet.tagTotals['Food'] || 0,
+                wallet.tagTotals['Bills'] || 0,
+              ],
+              backgroundColor: TAGS.map((tag) => tag.backgroundColor),
+              borderColor: '#ffffff',
+              borderWidth: 1,
+            },
+          ],
+          labels: ['SIPs', 'Travel', 'Shopping', 'Food', 'Bills'],
+        }}
+      />
+    );
+  };
+
    return (
-    <div className="flex flex-col lg:flex-row gap-40 justify-between ">
+    <div className="flex flex-col lg:flex-row gap-40 justify-between">
       <div className="relative w-2/5  shadow-md bg-silver rounded-lg border border-gray-300 top-40 left-20 p-4 mx-6 flex justify-center items-center">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -164,7 +205,7 @@ const ExpenseForm = ({ onExpenseAdded }) => {
                   name: e.target.value,
                 })
               }
-              className="form-input rounded-lg my-2"
+              className="form-input rounded-lg my-2 p-2"
             />
           </div>
           <div>
@@ -182,12 +223,12 @@ const ExpenseForm = ({ onExpenseAdded }) => {
                   amount: parseInt(e.target.value, 10),
                 })
               }
-              className="form-input rounded-lg my-2"
+              className="form-input rounded-lg my-2 p-2"
             />
           </div>
           <div className="space-x-2">
             <span className="font-medium mb-2">Tags</span>
-            <div>
+            <div className="p-2">
             {TAGS.map((tag) => (
               <button
                 key={tag}
@@ -204,7 +245,7 @@ const ExpenseForm = ({ onExpenseAdded }) => {
           </div>
           <div>
             <label htmlFor="receipt-image" className="block font-medium">
-              Receipt Image
+              Upload Receipt
             </label>
             <input
               type="file"
@@ -212,7 +253,7 @@ const ExpenseForm = ({ onExpenseAdded }) => {
               id="receipt-image"
               name="receipt-image"
               onChange={handleImageUpload}
-              className="form-input my-2"
+              className="form-input my-4"
             />
           </div>
 
@@ -243,30 +284,7 @@ const ExpenseForm = ({ onExpenseAdded }) => {
           Tag-wise expense
         </h1>
         <div className="flex justify-center items-center h-96">
-          <div>
-            <Pie
-              data={{
-                datasets: [
-                  {
-                    
-                    data:[
-                      wallet['SIPs'],
-                      wallet['Travel'] || 0,
-                      wallet['Shopping'] || 0,
-                      wallet['Food'] || 0,
-                      wallet['Bills'] || 0,
-                
-                    ],
-                    backgroundColor: TAGS.map((tag) => tag.backgroundColor),
-                    borderColor: '#ffffff',
-                    borderWidth: 1,
-
-                  },
-                ],
-                labels: ['SIPs', 'Travel', 'Shopping', 'Food', 'Bills'],
-              }}
-            />
-          </div>
+        <div>{renderPieChart()}</div>
         </div>
         <div className='flex gap-2 justify-center items-center'>
         {TAGS.map((tag) => (

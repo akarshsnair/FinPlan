@@ -7,7 +7,7 @@ const LoginPage = () => {
   const { data, status } = useSession();
   if (status === 'loading') return <h1> loading... please wait</h1>;
   if (status === 'authenticated') {
-    router.push('/budget');
+    router.push('/');
   }
   
   return (

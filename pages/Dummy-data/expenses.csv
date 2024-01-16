@@ -1,0 +1,35 @@
+ _id,name,age,month,wallet_type,total,detail_key,detail_value
+1,John Doe,30,January,Shopping,178250,gucci bag,300000
+1,John Doe,30,January,Shopping,178250,phone,110000
+1,John Doe,30,January,Shopping,178250,pants,400
+1,John Doe,30,January,Shopping,178250,T-shirt,300
+1,John Doe,30,January,Shopping,178250,iPhone 11,100
+1,John Doe,30,January,Shopping,178250,guitar,8000
+1,John Doe,30,January,Shopping,178250,soda,50
+1,John Doe,30,January,Shopping,178250,dd,90000
+1,John Doe,30,January,SIPs,80200,Investments,4000
+1,John Doe,30,January,SIPs,80200,Tata Steel Stocks,80000
+1,John Doe,30,January,Travel,70500,Ladakh,500
+1,John Doe,30,January,Travel,70500,Thailand,70000
+1,John Doe,30,January,Food,59000,Butter Chicken,400
+1,John Doe,30,January,Food,59000,dosa,200
+1,John Doe,30,January,Food,59000,30, RUE JULES VAN PRAET,253.5
+1,John Doe,30,January,Food,59000,Burger,5000
+1,John Doe,30,January,Food,59000,burger,500000
+1,John Doe,30,January,Food,59000,food,9000
+1,John Doe,30,January,Other,253.5,30, RUE JULES VAN PRAET,253.5
+1,John Doe,30,January,Bills,90000,Bill,9000000
+1,John Doe,30,February,Shopping,200000,shoes,15000
+1,John Doe,30,February,Shopping,200000,headphones,8000
+1,John Doe,30,February,Shopping,200000,jacket,12000
+1,John Doe,30,February,SIPs,75000,Mutual Funds,3000
+1,John Doe,30,February,SIPs,75000,Tech Stocks,72000
+1,John Doe,30,February,Travel,60000,Paris,4000
+1,John Doe,30,February,Travel,60000,Switzerland,56000
+1,John Doe,30,February,Food,45000,Pizza,300
+1,John Doe,30,February,Food,45000,sushi,1500
+1,John Doe,30,February,Food,45000,steak,30000
+1,John Doe,30,February,Other,120.5,Magazine subscription,50.5
+1,John Doe,30,February,Other,120.5,Coffee,70
+1,John Doe,30,February,Bills,80000,Electricity,8000
+1,John Doe,30,February,Bills,80000,Internet,72000
