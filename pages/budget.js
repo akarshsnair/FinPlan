@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Pie } from 'react-chartjs-2';
 import {Chart, ArcElement} from 'chart.js'
 Chart.register(ArcElement);
-
+import PieChart from './piechart';
 
 
 const ExpenseForm = ({ onExpenseAdded }) => {
@@ -74,12 +74,14 @@ const ExpenseForm = ({ onExpenseAdded }) => {
             }
           });
         }
+        
       });
       
 
       console.log('Calculated wallet:', tagTotals);
       console.log('Total for all tags:', totalAllTags);
       localStorage.setItem('totalAllTags', totalAllTags);
+      localStorage.setItem('tagTotals', JSON.stringify(tagTotals));
 
       setWallet({
         tagTotals,
@@ -162,29 +164,12 @@ const ExpenseForm = ({ onExpenseAdded }) => {
       return <p>Loading...</p>;
     }
 
+    const chartOptions = {
+      maintainAspectRatio: false, // Add this to allow controlling the size
+    };
 
-    return (
-      <Pie
-        data={{
-          datasets: [
-            {
-              data: [
-                wallet.tagTotals['SIPs'],
-                wallet.tagTotals['Travel'] || 0,
-                wallet.tagTotals['Shopping'] || 0,
-                wallet.tagTotals['Food'] || 0,
-                wallet.tagTotals['Bills'] || 0,
-              ],
-              backgroundColor: TAGS.map((tag) => tag.backgroundColor),
-              borderColor: '#ffffff',
-              borderWidth: 1,
-            },
-          ],
-          labels: ['SIPs', 'Travel', 'Shopping', 'Food', 'Bills'],
-        }}
-      />
-    );
-  };
+    return <PieChart tagTotals={wallet.tagTotals} options={chartOptions}/>;
+};
 
    return (
     <div className="flex flex-col lg:flex-row gap-40 justify-between">

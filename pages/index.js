@@ -6,6 +6,8 @@ import {useSession, signOut} from 'next-auth/react';
 import { useState } from 'react';
 import SmallCard from './SmallCard';
 import { useEffect } from 'react';
+import ExpenseForm from './budget';
+import PieChart from './piechart';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -30,6 +32,8 @@ export default function Example() {
   // Use state to manage storedTotalAllTags
   const [storedTotalAllTags, setStoredTotalAllTags] = useState(null);
 
+  const [tagTotals, setTagTotals] = useState(null);
+
   useEffect(() => {
     // Retrieve storedTotalAllTags on the client side
     const storedTags = localStorage.getItem('totalAllTags');
@@ -43,6 +47,19 @@ export default function Example() {
       setAvailableBalance(balance);
     }
   }, [storedTotalAllTags, totalIncome]);
+
+  useEffect(() => {
+    // Retrieve data from local storage
+    const storedTagTotals = localStorage.getItem('tagTotals');
+    if (storedTagTotals) {
+      setTagTotals(JSON.parse(storedTagTotals));
+    }
+
+    // Fetch additional data if needed
+    // ...
+
+  }, []);
+
 
   const handleInputChange = (field, value) => {
     setNewTransaction({
@@ -192,7 +209,11 @@ export default function Example() {
   </header>
   <main>
   <div className='flex flex-col lg:flex-row gap-40 justify-between'>
-    <div class="relative w-4/5 h-96 shadow-md bg-white rounded-lg border border-gray-300 top-40 left-20 float-left transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg p-4 mx-6"></div>
+    <div className="relative w-4/5 h-96 shadow-md bg-white rounded-lg border border-gray-300 top-40 left-20 p-4 mx-6 flex justify-center items-center">
+      <div>
+        <PieChart tagTotals={tagTotals}/>
+      </div>
+    </div>
     <div class="relative w-3/5 h-96 shadow-md bg-white rounded-lg border border-gray-300 top-40 right-20 float-left transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg p-4 mx-6">
     <div className="debt-section p-4">
           <h2 className="text-xl font-semibold mb-4">Debt Tracking</h2>
